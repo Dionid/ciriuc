@@ -15,8 +15,8 @@ program
 	.arguments('[componentPath]')
 	.option('-f, --functional', 'Make component functional')
 	.option('-s, --style [styleExt]', 'Select CSS pre or post processors')
-	.action((componentPath) => {
-		initGenerator(componentPath, program.styleExt)
+	.action((componentPath, {functional}) => {
+		initGenerator(componentPath, program.styleExt, functional)
 	})
 
 program.parse(process.argv)
@@ -80,11 +80,11 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 	})
 }
 
-async function initGenerator(userArg, stylesExt, fn){
+async function initGenerator(userArg, stylesExt, functional){
 	const componentPath = getComponentPath(userArg)
 	const componentName = getComponentName(componentPath)
 	const styleExt = stylesExt || '.pcss'
 
 	const dirDone = await createDirectory(componentPath)
-	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt))
+	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional))
 }

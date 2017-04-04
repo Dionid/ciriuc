@@ -10,6 +10,7 @@ function createComponentBody(componentName, functional = false) {
 	if (functional) {
 		return (
 `
+
 const ${componentName} = function ${componentName}() {
 	return (
 		<div></div>
