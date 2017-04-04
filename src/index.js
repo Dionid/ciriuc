@@ -33,12 +33,6 @@ async function createDirectory(componentPath) {
 	})
 }
 
-// function writeToFile(componentPath, component, ext, compTmpl) {
-// 	fs.writeFile(componentPath + '/' + component + ext, compTmpl, (err) => {
-// 		if (err) { throw err };
-// 	})
-// }
-
 function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 	const jsCreatePromise = new Promise((resolve, reject) => {
 		exec(action + componentPath + '/' + componentName + '.js', (err, stdout) => {
@@ -83,7 +77,7 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 async function initGenerator(userArg, stylesExt, functional){
 	const componentPath = getComponentPath(userArg)
 	const componentName = getComponentName(componentPath)
-	const styleExt = stylesExt || '.pcss'
+	const styleExt = stylesExt ? '.'+stylesExt : '.scss'
 
 	const dirDone = await createDirectory(componentPath)
 	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional))

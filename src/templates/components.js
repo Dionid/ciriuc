@@ -1,7 +1,9 @@
 
 function createComponentImports(componentName, stylesExt) {
 	return(
-`import React, { Component, PropTypes } from 'react'
+`/* @flow */
+
+import React, { Component, PropTypes } from 'react'
 import styles from './${componentName}${stylesExt}'`
 	)
 }
@@ -11,7 +13,7 @@ function createComponentBody(componentName, functional = false) {
 		return (
 `
 
-const ${componentName} = function ${componentName}() {
+function ${componentName}() {
 	return (
 		<div></div>
 	)
