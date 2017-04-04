@@ -14,9 +14,10 @@ program
 	.description('Create component')
 	.arguments('[componentPath]')
 	.option('-f, --functional', 'Make component functional')
+	.option('-r, --redux', 'Connect component to redux store')
 	.option('-s, --style [styleExt]', 'Select CSS pre or post processors')
-	.action((componentPath, {functional}) => {
-		initGenerator(componentPath, program.styleExt, functional)
+	.action((componentPath, {functional, redux}) => {
+		initGenerator(componentPath, program.styleExt, functional, redux)
 	})
 
 program.parse(process.argv)
@@ -74,11 +75,23 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 	})
 }
 
-async function initGenerator(userArg, stylesExt, functional){
+function getStylesExt(userStylesExt) {
+	let res = '.'
+
+	if (userStylesExt) {
+		res += userStylesExt
+	} else {
+		res += 'scss'
+	}
+
+	return res
+}
+
+async function initGenerator(userArg, stylesExt, functional, redux){
 	const componentPath = getComponentPath(userArg)
 	const componentName = getComponentName(componentPath)
-	const styleExt = stylesExt ? '.'+stylesExt : '.scss'
+	const styleExt = getStylesExt(stylesExt)
 
 	const dirDone = await createDirectory(componentPath)
-	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional))
+	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional, redux))
 }

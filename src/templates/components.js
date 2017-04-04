@@ -1,11 +1,16 @@
 
-function createComponentImports(componentName, stylesExt) {
-	return(
-`/* @flow */
+function createComponentImports(componentName, stylesExt, redux = false) {
 
+	let res = `/* @flow */
 import React, { Component, PropTypes } from 'react'
-import styles from './${componentName}${stylesExt}'`
-	)
+import styles from './${componentName}${stylesExt}'
+`
+
+	if (redux) {
+		res += `import { connect } from 'react-redux'`
+	}
+
+	return res
 }
 
 function createComponentBody(componentName, functional = false) {
@@ -45,17 +50,37 @@ class ${componentName} extends Component {
 	}
 }
 
-function createComponentExport(componentName) {
-	return(
-`
+function createComponentExport(componentName, redux = false) {
+	let res = ''
 
-export default ${componentName}
-`
-	)
+	if (redux) {
+		res += `
+
+function mapStateToProps(state, ownProps) {
+	return {
+		
+	}
 }
 
-function createComponentTmpl(componentName, stylesExt, functional) {
-	const res = createComponentImports(componentName, stylesExt) + createComponentBody(componentName, functional) + createComponentExport(componentName)
+function mapDispatchToProps(dispatch) {
+	return {
+		
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(${componentName})
+`
+	} else {
+		res += `
+export default ${componentName}
+`
+	}
+
+	return res
+}
+
+function createComponentTmpl(componentName, stylesExt, functional, redux) {
+	const res = createComponentImports(componentName, stylesExt, redux) + createComponentBody(componentName, functional) + createComponentExport(componentName, redux)
 	return res
 }
 
