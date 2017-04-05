@@ -36,9 +36,8 @@ async function createDirectory(componentPath, parentResolve) {
 			} catch (err) {
 				if (err.code === 'ENOENT') {
 					console.error(
-						chalk.red(
-							"Some directory in the component folder path doesn't exist!\n" +
-							"Please create this folders before:") + chalk.green(`'${componentPath.split('/').slice(0, -1).join('/')}'`)
+						chalk.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:")
+						+ chalk.green(" mkdir " + componentPath.split('/').slice(0, -1).join('/'))
 					)
 				}
 			}

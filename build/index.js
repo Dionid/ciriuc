@@ -23,7 +23,7 @@ var createDirectory = function () {
 									resolve('GOTOVO');
 								} catch (err) {
 									if (err.code === 'ENOENT') {
-										console.error(_chalk2.default.red("Some directory in the component folder path doesn't exist!\n" + "Please create this folders before:") + _chalk2.default.green('\'' + componentPath.split('/').slice(0, -1).join('/') + '\''));
+										console.error(_chalk2.default.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:") + _chalk2.default.green("'mkdir " + componentPath.split('/').slice(0, -1).join('/') + "'"));
 									}
 								}
 							} else {
