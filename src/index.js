@@ -1,18 +1,14 @@
 #!/usr/bin/env node --harmony
 
 import program from 'commander'
-import co from 'co'
 import mkdirp from 'mkdirp'
 import chalk from 'chalk'
-// import prompt from 'co-prompt'
 import prompt from 'prompt'
 import rimraf from 'rimraf'
 import { exec } from 'child_process'
 import fs from 'fs'
 import {getComponentPath, getComponentName, createFileAction, getStylesExt} from './utils/index'
 import { createPackageJSON, createComponentTmpl } from './templates/index'
-
-console.log('Init')
 
 program
 	.version('0.0.1')

@@ -1,12 +1,14 @@
 {
   "name": "ciriuc",
-  "version": "1.0.1",
+  "version": "1.1.3",
   "description": "React component generator",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build",
-    "build": "npm run clean && babel src --out-dir build && npm link"
+    "build": "npm run clean && babel src --out-dir build",
+    "devbuild": "npm run clean && babel src --out-dir build && npm link",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -37,8 +39,6 @@
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "co": "^4.6.0",
-    "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
     "mkdirp": "^0.5.1",
     "prompt": "^1.0.0",
