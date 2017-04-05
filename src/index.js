@@ -1,9 +1,12 @@
 #!/usr/bin/env node --harmony
 
 import program from 'commander'
+import co from 'co'
+import prompt from 'co-prompt'
+import rimraf from 'rimraf'
 import { exec } from 'child_process'
 import fs from 'fs'
-import {getComponentPath, getComponentName, createFileAction} from './utils/index'
+import {getComponentPath, getComponentName, createFileAction, getStylesExt} from './utils/index'
 import { createPackageJSON, createComponentTmpl } from './templates/index'
 
 console.log('Init')
@@ -22,15 +25,31 @@ program
 
 program.parse(process.argv)
 
-async function createDirectory(componentPath) {
+async function createDirectory(componentPath, parentResolve) {
 	return new Promise((resolve, reject) => {
-		exec('mkdir -p ' + componentPath, (err, stdout) => {
-			if (err) {
-				reject(err)
-				throw err
+		resolve = parentResolve || resolve
+		if (!fs.existsSync(componentPath)) {
+			try {
+				fs.mkdirSync(componentPath)
+				resolve('GOTOVO')
+			} catch (err) {
+				if (err.code === 'ENOENT') {
+					console.log('NO FILLOOO')
+				}
 			}
-			resolve('GOTOVO')
-		})
+		} else {
+			co(function *() {
+				const answer = yield prompt("File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] ")
+				if (answer === 'yes') {
+					console.log(componentPath)
+					rimraf(componentPath, () => {
+						createDirectory(componentPath, resolve)
+					})
+				} else {
+					process.exit(0);
+				}
+			})
+		}
 	})
 }
 
@@ -75,18 +94,6 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 	})
 }
 
-function getStylesExt(userStylesExt) {
-	let res = '.'
-
-	if (userStylesExt) {
-		res += userStylesExt
-	} else {
-		res += 'scss'
-	}
-
-	return res
-}
-
 async function initGenerator(userArg, stylesExt, functional, redux){
 	const componentPath = getComponentPath(userArg)
 	const componentName = getComponentName(componentPath)
@@ -94,4 +101,5 @@ async function initGenerator(userArg, stylesExt, functional, redux){
 
 	const dirDone = await createDirectory(componentPath)
 	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional, redux))
+	process.exit(0);
 }

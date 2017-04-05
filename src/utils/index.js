@@ -37,8 +37,21 @@ function getComponentName(componentPath) {
 	return componentName
 }
 
+function getStylesExt(userStylesExt) {
+	let res = '.'
+
+	if (userStylesExt) {
+		res += userStylesExt
+	} else {
+		res += 'scss'
+	}
+
+	return res
+}
+
 export {
 	getComponentPath,
 	getComponentName,
+	getStylesExt,
 	createFileAction
 }
