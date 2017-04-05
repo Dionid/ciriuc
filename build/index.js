@@ -33,8 +33,6 @@ var _index2 = require('./templates/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log('Init');
-
 _commander2.default.version('0.0.1').command('comp').description('Create component').arguments('[componentPath]').option('-f, --functional', 'Make component functional').option('-r, --redux', 'Connect component to redux store').option('-s, --style [styleExt]', 'Select CSS pre or post processors').action(function (componentPath, _ref) {
 	var functional = _ref.functional,
 	    redux = _ref.redux;
