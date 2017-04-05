@@ -4,7 +4,8 @@ import program from 'commander'
 import co from 'co'
 import mkdirp from 'mkdirp'
 import chalk from 'chalk'
-import prompt from 'co-prompt'
+// import prompt from 'co-prompt'
+import prompt from 'prompt'
 import rimraf from 'rimraf'
 import { exec } from 'child_process'
 import fs from 'fs'
@@ -27,38 +28,7 @@ program
 
 program.parse(process.argv)
 
-// async function createDirectory(componentPath, parentResolve) {
-// 	return new Promise((resolve, reject) => {
-// 		resolve = parentResolve || resolve
-// 		if (!fs.existsSync(componentPath)) {
-// 			try {
-// 				fs.mkdirSync(componentPath)
-// 				resolve('GOTOVO')
-// 			} catch (err) {
-// 				if (err.code === 'ENOENT') {
-// 					console.error(
-// 						chalk.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:")
-// 						+ chalk.green(" mkdir " + componentPath.split('/').slice(0, -1).join('/'))
-// 					)
-// 				}
-// 			}
-// 		} else {
-// 			co(function *() {
-// 				const answer = yield prompt("File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] ")
-// 				if (answer === 'yes') {
-// 					console.log(componentPath)
-// 					rimraf(componentPath, () => {
-// 						createDirectory(componentPath, resolve)
-// 					})
-// 				} else {
-// 					process.exit(0);
-// 				}
-// 			})
-// 		}
-// 	})
-// }
-
-async function createDirectory(componentPath, parentResolve) {
+function createDirectory(componentPath, parentResolve) {
 	return new Promise((resolve, reject) => {
 		resolve = parentResolve || resolve
 		if (!fs.existsSync(componentPath)) {
@@ -67,10 +37,13 @@ async function createDirectory(componentPath, parentResolve) {
 				resolve('GOTOVO')
 			})
 		} else {
-			co(function *() {
-				const answer = yield prompt("File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] ")
-				if (answer === 'yes') {
-					console.log(componentPath)
+			prompt.start()
+			prompt.get([{
+				name: 'change',
+				type: 'string',
+				description: "File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] "
+			}], function (err, answer) {
+				if (answer.change === 'yes') {
 					rimraf(componentPath, () => {
 						createDirectory(componentPath, resolve)
 					})
@@ -124,12 +97,14 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 	})
 }
 
-async function initGenerator(userArg, stylesExt, functional, redux){
+function initGenerator(userArg, stylesExt, functional, redux){
 	const componentPath = getComponentPath(userArg)
 	const componentName = getComponentName(componentPath)
 	const styleExt = getStylesExt(stylesExt)
 
-	const dirDone = await createDirectory(componentPath)
-	const files = await createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional, redux))
-	process.exit(0);
+	createDirectory(componentPath).then(() => {
+		createFiles(createFileAction, componentPath, componentName, styleExt, createComponentTmpl(componentName, styleExt, functional, redux)).then(() => {
+			process.exit(0);
+		})
+	})
 }

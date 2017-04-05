@@ -11,7 +11,7 @@ function createComponentImports(componentName, stylesExt) {
 	var res = '/* @flow */\nimport React, { Component } from \'react\'\nimport styles from \'./' + componentName + stylesExt + '\'';
 
 	if (redux) {
-		res += 'import { connect } from \'react-redux\'';
+		res += '\nimport { connect } from \'react-redux\'';
 	}
 
 	return res;
