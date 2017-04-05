@@ -2,6 +2,7 @@
 
 import program from 'commander'
 import co from 'co'
+import chalk from 'chalk'
 import prompt from 'co-prompt'
 import rimraf from 'rimraf'
 import { exec } from 'child_process'
@@ -34,7 +35,11 @@ async function createDirectory(componentPath, parentResolve) {
 				resolve('GOTOVO')
 			} catch (err) {
 				if (err.code === 'ENOENT') {
-					console.log('NO FILLOOO')
+					console.error(
+						chalk.red(
+							"Some directory in the component folder path doesn't exist!\n" +
+							"Please create this folders before:") + chalk.green(`'${componentPath.split('/').slice(0, -1).join('/')}'`)
+					)
 				}
 			}
 		} else {
