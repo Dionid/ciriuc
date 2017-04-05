@@ -2,12 +2,12 @@
 function createComponentImports(componentName, stylesExt, redux = false) {
 
 	let res = `/* @flow */
-import React, { Component, PropTypes } from 'react'
-import styles from './${componentName}${stylesExt}'
-`
+import React, { Component } from 'react'
+import styles from './${componentName}${stylesExt}'`
 
 	if (redux) {
-		res += `import { connect } from 'react-redux'`
+		res += `
+import { connect } from 'react-redux'`
 	}
 
 	return res
@@ -34,7 +34,6 @@ ${componentName}.propTypes = {
 `
 
 class ${componentName} extends Component {
-
 	static propTypes = {
 		
 	}

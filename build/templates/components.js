@@ -8,7 +8,7 @@ function createComponentImports(componentName, stylesExt) {
 	var redux = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 
-	var res = '/* @flow */\nimport React, { Component, PropTypes } from \'react\'\nimport styles from \'./' + componentName + stylesExt + '\'\n';
+	var res = '/* @flow */\nimport React, { Component } from \'react\'\nimport styles from \'./' + componentName + stylesExt + '\'';
 
 	if (redux) {
 		res += 'import { connect } from \'react-redux\'';
@@ -23,7 +23,7 @@ function createComponentBody(componentName) {
 	if (functional) {
 		return '\n\nfunction ' + componentName + '() {\n\treturn (\n\t\t<div></div>\n\t)\n}\n\n' + componentName + '.propTypes = {\n\t\n}\n';
 	} else {
-		return '\n\nclass ' + componentName + ' extends Component {\n\n\tstatic propTypes = {\n\t\t\n\t}\n\n\trender() {\n\t\treturn (\n\t\t\t<div></div>\n\t\t)\n\t}\n}\n';
+		return '\n\nclass ' + componentName + ' extends Component {\n\tstatic propTypes = {\n\t\t\n\t}\n\n\trender() {\n\t\treturn (\n\t\t\t<div></div>\n\t\t)\n\t}\n}\n';
 	}
 }
 

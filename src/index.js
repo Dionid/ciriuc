@@ -2,6 +2,7 @@
 
 import program from 'commander'
 import co from 'co'
+import mkdirp from 'mkdirp'
 import chalk from 'chalk'
 import prompt from 'co-prompt'
 import rimraf from 'rimraf'
@@ -26,21 +27,45 @@ program
 
 program.parse(process.argv)
 
+// async function createDirectory(componentPath, parentResolve) {
+// 	return new Promise((resolve, reject) => {
+// 		resolve = parentResolve || resolve
+// 		if (!fs.existsSync(componentPath)) {
+// 			try {
+// 				fs.mkdirSync(componentPath)
+// 				resolve('GOTOVO')
+// 			} catch (err) {
+// 				if (err.code === 'ENOENT') {
+// 					console.error(
+// 						chalk.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:")
+// 						+ chalk.green(" mkdir " + componentPath.split('/').slice(0, -1).join('/'))
+// 					)
+// 				}
+// 			}
+// 		} else {
+// 			co(function *() {
+// 				const answer = yield prompt("File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] ")
+// 				if (answer === 'yes') {
+// 					console.log(componentPath)
+// 					rimraf(componentPath, () => {
+// 						createDirectory(componentPath, resolve)
+// 					})
+// 				} else {
+// 					process.exit(0);
+// 				}
+// 			})
+// 		}
+// 	})
+// }
+
 async function createDirectory(componentPath, parentResolve) {
 	return new Promise((resolve, reject) => {
 		resolve = parentResolve || resolve
 		if (!fs.existsSync(componentPath)) {
-			try {
-				fs.mkdirSync(componentPath)
+			mkdirp(componentPath, function (err) {
+				if (err) console.error(chalk.red(err))
 				resolve('GOTOVO')
-			} catch (err) {
-				if (err.code === 'ENOENT') {
-					console.error(
-						chalk.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:")
-						+ chalk.green(" mkdir " + componentPath.split('/').slice(0, -1).join('/'))
-					)
-				}
-			}
+			})
 		} else {
 			co(function *() {
 				const answer = yield prompt("File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] ")
@@ -58,13 +83,24 @@ async function createDirectory(componentPath, parentResolve) {
 }
 
 function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
+	const pkjCreatePromise = new Promise((resolve, reject) => {
+		exec(action + componentPath + '/package.json', (err, stdout) => {
+			if (err) { reject(err) }
+			fs.writeFile(componentPath + '/package.json', createPackageJSON(componentName), (err) => {
+				if (err) { reject(err) }
+				resolve('Package created!')
+			})
+		})
+	})
+
 	const jsCreatePromise = new Promise((resolve, reject) => {
 		exec(action + componentPath + '/' + componentName + '.js', (err, stdout) => {
 			if (err) {
+				if (err) console.error(chalk.red(err))
 				reject(err)
 			}
 			fs.writeFile(componentPath + '/' + componentName + '.js', compTmpl, (err) => {
-				if (err) { throw err }
+				if (err) { if (err) console.error(chalk.red(err)) }
 				resolve('Js created')
 			})
 		})
@@ -74,16 +110,6 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 		exec(action + componentPath + '/' + componentName + styleExt, (err, stdout) => {
 			if (err) { reject(err) }
 			resolve('Styles created!')
-		})
-	})
-
-	const pkjCreatePromise = new Promise((resolve, reject) => {
-		exec(action + componentPath + '/package.json', (err, stdout) => {
-			if (err) { reject(err) }
-			fs.writeFile(componentPath + '/package.json', createPackageJSON(componentName), (err) => {
-				if (err) { reject(err) }
-				resolve('Package created!')
-			})
 		})
 	})
 

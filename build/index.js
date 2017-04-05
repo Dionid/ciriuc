@@ -9,6 +9,37 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+// async function createDirectory(componentPath, parentResolve) {
+// 	return new Promise((resolve, reject) => {
+// 		resolve = parentResolve || resolve
+// 		if (!fs.existsSync(componentPath)) {
+// 			try {
+// 				fs.mkdirSync(componentPath)
+// 				resolve('GOTOVO')
+// 			} catch (err) {
+// 				if (err.code === 'ENOENT') {
+// 					console.error(
+// 						chalk.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:")
+// 						+ chalk.green(" mkdir " + componentPath.split('/').slice(0, -1).join('/'))
+// 					)
+// 				}
+// 			}
+// 		} else {
+// 			co(function *() {
+// 				const answer = yield prompt("File is exist, are you want to change it? ['yes' for yes, 'no' from no] ['no' by default] ")
+// 				if (answer === 'yes') {
+// 					console.log(componentPath)
+// 					rimraf(componentPath, () => {
+// 						createDirectory(componentPath, resolve)
+// 					})
+// 				} else {
+// 					process.exit(0);
+// 				}
+// 			})
+// 		}
+// 	})
+// }
+
 var createDirectory = function () {
 	var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(componentPath, parentResolve) {
 		return _regenerator2.default.wrap(function _callee2$(_context2) {
@@ -18,14 +49,10 @@ var createDirectory = function () {
 						return _context2.abrupt('return', new Promise(function (resolve, reject) {
 							resolve = parentResolve || resolve;
 							if (!_fs2.default.existsSync(componentPath)) {
-								try {
-									_fs2.default.mkdirSync(componentPath);
+								(0, _mkdirp2.default)(componentPath, function (err) {
+									if (err) console.error(_chalk2.default.red(err));
 									resolve('GOTOVO');
-								} catch (err) {
-									if (err.code === 'ENOENT') {
-										console.error(_chalk2.default.red("Some directory in the component folder path doesn't exist!\n Please create this folders before:") + _chalk2.default.green("'mkdir " + componentPath.split('/').slice(0, -1).join('/') + "'"));
-									}
-								}
+								});
 							} else {
 								(0, _co2.default)(_regenerator2.default.mark(function _callee() {
 									var answer;
@@ -115,6 +142,10 @@ var _co = require('co');
 
 var _co2 = _interopRequireDefault(_co);
 
+var _mkdirp = require('mkdirp');
+
+var _mkdirp2 = _interopRequireDefault(_mkdirp);
+
 var _chalk = require('chalk');
 
 var _chalk2 = _interopRequireDefault(_chalk);
@@ -151,14 +182,29 @@ _commander2.default.version('0.0.1').command('comp').description('Create compone
 _commander2.default.parse(process.argv);
 
 function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
+	var pkjCreatePromise = new Promise(function (resolve, reject) {
+		(0, _child_process.exec)(action + componentPath + '/package.json', function (err, stdout) {
+			if (err) {
+				reject(err);
+			}
+			_fs2.default.writeFile(componentPath + '/package.json', (0, _index2.createPackageJSON)(componentName), function (err) {
+				if (err) {
+					reject(err);
+				}
+				resolve('Package created!');
+			});
+		});
+	});
+
 	var jsCreatePromise = new Promise(function (resolve, reject) {
 		(0, _child_process.exec)(action + componentPath + '/' + componentName + '.js', function (err, stdout) {
 			if (err) {
+				if (err) console.error(_chalk2.default.red(err));
 				reject(err);
 			}
 			_fs2.default.writeFile(componentPath + '/' + componentName + '.js', compTmpl, function (err) {
 				if (err) {
-					throw err;
+					if (err) console.error(_chalk2.default.red(err));
 				}
 				resolve('Js created');
 			});
@@ -171,20 +217,6 @@ function createFiles(action, componentPath, componentName, styleExt, compTmpl) {
 				reject(err);
 			}
 			resolve('Styles created!');
-		});
-	});
-
-	var pkjCreatePromise = new Promise(function (resolve, reject) {
-		(0, _child_process.exec)(action + componentPath + '/package.json', function (err, stdout) {
-			if (err) {
-				reject(err);
-			}
-			_fs2.default.writeFile(componentPath + '/package.json', (0, _index2.createPackageJSON)(componentName), function (err) {
-				if (err) {
-					reject(err);
-				}
-				resolve('Package created!');
-			});
 		});
 	});
 
