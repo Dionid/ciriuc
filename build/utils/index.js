@@ -30,7 +30,13 @@ function getComponentPath(componentPath) {
 		}
 	}
 
-	res += componentPath;
+	var componentPathArr = componentPath.split('/');
+	var compName = componentPathArr[componentPathArr.length - 1];
+	var compPath = componentPathArr.slice(0, -1).join('/');
+
+	compName = compName.charAt(0).toUpperCase() + compName.slice(1);
+
+	res += compPath + '/' + compName;
 
 	return res;
 }

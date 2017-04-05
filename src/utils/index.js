@@ -25,16 +25,20 @@ function getComponentPath(componentPath) {
 		}
 	}
 
-	res += componentPath
+	const componentPathArr = componentPath.split('/')
+	let compName = componentPathArr[componentPathArr.length - 1]
+	const compPath = componentPathArr.slice(0,-1).join('/')
+
+	compName = compName.charAt(0).toUpperCase() + compName.slice(1)
+
+	res += compPath + '/' + compName
 
 	return res
 }
 
 function getComponentName(componentPath) {
 	const componentPathArr = componentPath.split('/')
-	let componentName = componentPathArr[componentPathArr.length - 1]
-
-	componentName = componentName.charAt(0).toUpperCase() + componentName.slice(1)
+	const componentName = componentPathArr[componentPathArr.length - 1]
 
 	return componentName
 }
