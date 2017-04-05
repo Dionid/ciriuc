@@ -32,7 +32,9 @@ function getComponentPath(componentPath) {
 
 function getComponentName(componentPath) {
 	const componentPathArr = componentPath.split('/')
-	const componentName = componentPathArr[componentPathArr.length - 1]
+	let componentName = componentPathArr[componentPathArr.length - 1]
+
+	componentName = componentName.charAt(0).toUpperCase() + componentName.slice(1)
 
 	return componentName
 }

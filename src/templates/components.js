@@ -2,13 +2,15 @@
 function createComponentImports(componentName, stylesExt, redux = false) {
 
 	let res = `/* @flow */
-import React, { Component } from 'react'
-import styles from './${componentName}${stylesExt}'`
+import React, { Component } from 'react'`
 
 	if (redux) {
 		res += `
 import { connect } from 'react-redux'`
 	}
+
+	res += `
+import styles from './${componentName}${stylesExt}'`
 
 	return res
 }
