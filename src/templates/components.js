@@ -2,7 +2,8 @@
 function createComponentImports(componentName, stylesExt, redux = false) {
 
 	let res = `/* @flow */
-import React, { Component } from 'react'`
+import React, { Component, PropTypes } from 'react'
+import classnames from 'classnames'`
 
 	if (redux) {
 		res += `

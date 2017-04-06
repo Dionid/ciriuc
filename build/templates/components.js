@@ -8,7 +8,7 @@ function createComponentImports(componentName, stylesExt) {
 	var redux = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 
-	var res = '/* @flow */\nimport React, { Component } from \'react\'';
+	var res = '/* @flow */\nimport React, { Component } from \'react\'\nimport classnames from \'classnames\'';
 
 	if (redux) {
 		res += '\nimport { connect } from \'react-redux\'';
