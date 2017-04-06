@@ -8,7 +8,7 @@ This will create component directory with .js, .scss and package.json
 
 <pre>
 <code>
-ciriuc comp path/to/directory/ComponentFoldreName
+crc comp path/to/directory/ComponentFoldreName
 </code>
 </pre>
 
@@ -18,7 +18,7 @@ For functional component use flag -f OR --functional
 
 <pre>
 <code>
-ciriuc comp path/to/directory/ComponentFoldreName -f
+crc comp path/to/directory/ComponentFoldreName -f
 </code>
 </pre>
 
@@ -28,6 +28,6 @@ For Redux connect use flag -r OR --redux
 
 <pre>
 <code>
-ciriuc comp path/to/directory/ComponentFoldreName -r
+crc comp path/to/directory/ComponentFoldreName -r
 </code>
 </pre>
