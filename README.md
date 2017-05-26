@@ -4,10 +4,10 @@ Helps you with creating react components.
 
 ## Stack
 
-This is cli is using with:
+This is technologies cli is using with:
 
 1. React
-1. classnames
+1. classnames ([classnames/bind](https://github.com/JedWatson/classnames#alternate-bind-version-for-css-modules) to be clear)
 1. SCSS
 1. Flow
 1. Redux*
