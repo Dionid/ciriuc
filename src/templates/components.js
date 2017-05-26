@@ -2,8 +2,8 @@
 function createComponentImports(componentName, stylesExt, redux = false) {
 
 	let res = `/* @flow */
-import React, { Component, PropTypes } from 'react'
-import classnames from 'classnames'`
+import React, { Component } from 'react'
+import classnamesBind from 'classnames/bind'`
 
 	if (redux) {
 		res += `
@@ -11,7 +11,12 @@ import { connect } from 'react-redux'`
 	}
 
 	res += `
-import styles from './${componentName}${stylesExt}'`
+import styles from './${componentName}${stylesExt}'
+const cx = classnamesBind.bind(styles)
+
+type ${componentName}Props = {
+
+}`
 
 	return res
 }
@@ -21,14 +26,10 @@ function createComponentBody(componentName, functional = false) {
 		return (
 `
 
-function ${componentName}() {
+function ${componentName}(props:${componentName}Props) {
 	return (
 		<div></div>
 	)
-}
-
-${componentName}.propTypes = {
-	
 }
 `
 		)
@@ -37,9 +38,7 @@ ${componentName}.propTypes = {
 `
 
 class ${componentName} extends Component {
-	static propTypes = {
-		
-	}
+	props: ${componentName}Props
 
 	render() {
 		return (

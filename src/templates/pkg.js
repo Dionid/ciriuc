@@ -2,7 +2,8 @@ function createPackageJSON(componentName) {
 	return (
 		`{
 	"main": "./${componentName}.js"
-}`
+}
+`
 	)
 }
 
