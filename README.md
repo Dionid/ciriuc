@@ -2,13 +2,38 @@
 
 Helps you with creating react components.
 
+## Stack
+
+This is cli is using with:
+
+1. React
+1. classnames
+1. SCSS
+1. Flow
+1. Redux*
+
+*-optional
+
+## Result
+
+You will get structure like this:
+
+<pre>
+<code>
+path/to/directory/${ComponentName}
+  - ${ComponentName}.js
+  - ${ComponentName}.scss
+  - package.json
+</code>
+</pre>
+
 ## Base API:
 
 This will create component directory with .js, .scss and package.json
 
 <pre>
 <code>
-crc comp path/to/directory/ComponentFoldreName
+  crc comp path/to/directory/${ComponentName}
 </code>
 </pre>
 
@@ -18,7 +43,7 @@ For functional component use flag -f OR --functional
 
 <pre>
 <code>
-crc comp path/to/directory/ComponentFoldreName -f
+  crc comp path/to/directory/${ComponentName} -f
 </code>
 </pre>
 
@@ -28,6 +53,6 @@ For Redux connect use flag -r OR --redux
 
 <pre>
 <code>
-crc comp path/to/directory/ComponentFoldreName -r
+  crc comp path/to/directory/${ComponentName} -r
 </code>
 </pre>
